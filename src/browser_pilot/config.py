@@ -18,17 +18,17 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    # --- LLM: Ollama (primary, local, free) ---
-    ollama_base_url: str = Field(
-        default="http://localhost:11434",
-        description="Ollama server base URL",
+    # --- LLM: Google Gemini (primary) ---
+    google_api_key: str = Field(
+        default="",
+        description="Google API key for Gemini",
     )
-    ollama_model: str = Field(
-        default="gemma3:4b",
-        description="Ollama vision model name",
+    gemini_model: str = Field(
+        default="gemini-2.0-flash",
+        description="Gemini model name",
     )
 
-    # --- LLM: OpenRouter (fallback, free tier) ---
+    # --- LLM: OpenRouter (fallback) ---
     openrouter_api_key: str = Field(
         default="",
         description="OpenRouter API key (free, no credit card)",
@@ -92,34 +92,34 @@ class Settings(BaseSettings):
         description="Browser recording directory",
     )
 
-    def get_llm_base_url(self, provider: str = "ollama") -> str:
+    def get_llm_base_url(self, provider: str = "gemini") -> str:
         """Get the base URL for the specified LLM provider."""
-        if provider == "ollama":
-            return f"{self.ollama_base_url}/v1"
+        if provider == "gemini":
+            return ""  # ChatGoogleGenerativeAI uses client directly
         elif provider == "openrouter":
             return "https://openrouter.ai/api/v1"
         msg = f"Unknown provider: {provider}"
         raise ValueError(msg)
 
-    def get_llm_api_key(self, provider: str = "ollama") -> str:
+    def get_llm_api_key(self, provider: str = "gemini") -> str:
         """Get the API key for the specified LLM provider."""
-        if provider == "ollama":
-            return "ollama"  # Ollama doesn't need a real key
+        if provider == "gemini":
+            if not self.google_api_key:
+                msg = "GOOGLE_API_KEY not set. Set in .env file."
+                raise ValueError(msg)
+            return self.google_api_key
         elif provider == "openrouter":
             if not self.openrouter_api_key:
-                msg = (
-                    "OpenRouter API key not set. "
-                    "Get a free key at https://openrouter.ai"
-                )
+                msg = "OpenRouter API key not set. Get free key at https://openrouter.ai"
                 raise ValueError(msg)
             return self.openrouter_api_key
         msg = f"Unknown provider: {provider}"
         raise ValueError(msg)
 
-    def get_llm_model(self, provider: str = "ollama") -> str:
+    def get_llm_model(self, provider: str = "gemini") -> str:
         """Get the model name for the specified LLM provider."""
-        if provider == "ollama":
-            return self.ollama_model
+        if provider == "gemini":
+            return self.gemini_model
         elif provider == "openrouter":
             return self.openrouter_model
         msg = f"Unknown provider: {provider}"

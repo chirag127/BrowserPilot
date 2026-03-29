@@ -1,7 +1,7 @@
 [project]
 name = "browser-pilot"
 version = "0.1.0"
-description = "Autonomous browser agent using Ollama vision, Playwright, and LangChain"
+description = "Autonomous browser agent using Gemini vision, Playwright, and LangChain"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.12"
@@ -10,7 +10,7 @@ dependencies = [
     "browser-use>=0.12.5,<1.0",
     "playwright>=1.58.0,<2.0",
     "langchain>=0.3.25,<1.0",
-    "langchain-openai>=0.3.12,<1.0",
+    "langchain-google-genai>=2.1.0,<3.0",
     "fastapi>=0.135.2,<1.0",
     "uvicorn[standard]>=0.34.0,<1.0",
     "pydantic>=2.10,<3.0",

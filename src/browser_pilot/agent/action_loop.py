@@ -39,7 +39,7 @@ class ActionLoop:
 
     def __init__(
         self,
-        provider: str = "ollama",
+        provider: str = "gemini",
     ) -> None:
         self._settings = get_settings()
         self._provider = provider

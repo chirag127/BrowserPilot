@@ -15,8 +15,8 @@ class CreateTaskRequest(BaseModel):
         description="Natural language task instruction",
     )
     provider: str = Field(
-        default="ollama",
-        description="LLM provider (ollama or openrouter)",
+        default="gemini",
+        description="LLM provider (gemini or openrouter)",
     )
     headless: bool = Field(
         default=True,
@@ -61,7 +61,7 @@ class HealthResponse(BaseModel):
     status: str = "ok"
     version: str = "0.1.0"
     active_tasks: int = 0
-    ollama_available: bool = False
+    gemini_available: bool = False
     openrouter_available: bool = False
 
 

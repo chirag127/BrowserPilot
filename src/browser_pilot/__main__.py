@@ -25,8 +25,8 @@ def cli() -> None:
 @click.argument("instruction")
 @click.option(
     "--provider",
-    type=click.Choice(["ollama", "openrouter"]),
-    default="ollama",
+    type=click.Choice(["gemini", "openrouter"]),
+    default="gemini",
     help="LLM provider to use",
 )
 @click.option(
@@ -111,8 +111,10 @@ def config() -> None:
     table.add_column("Setting", style="cyan")
     table.add_column("Value", style="green")
 
-    table.add_row("Ollama URL", settings.ollama_base_url)
-    table.add_row("Ollama Model", settings.ollama_model)
+    table.add_row(
+        "Google API Key", "***" if settings.google_api_key else "(not set)"
+    )
+    table.add_row("Gemini Model", settings.gemini_model)
     table.add_row(
         "OpenRouter Key",
         "***" if settings.openrouter_api_key else "(not set)",

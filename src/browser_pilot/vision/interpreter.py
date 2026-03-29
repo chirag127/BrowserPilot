@@ -1,7 +1,7 @@
 """Vision interpreter — sends screenshots to LLM for action decisions."""
 
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 from browser_pilot.config import get_settings
 from browser_pilot.logging import get_logger
@@ -19,22 +19,34 @@ class VisionInterpreter:
 
     def __init__(
         self,
-        provider: str = "ollama",
+        provider: str = "gemini",
     ) -> None:
         self._settings = get_settings()
         self._provider = provider
         self._llm = self._create_llm()
 
-    def _create_llm(self) -> ChatOpenAI:
+    def _create_llm(self) -> ChatGoogleGenerativeAI:
         """Create an LLM client for the specified provider."""
         settings = self._settings
-        return ChatOpenAI(
-            model=settings.get_llm_model(self._provider),
-            base_url=settings.get_llm_base_url(self._provider),
-            api_key=settings.get_llm_api_key(self._provider),
-            max_tokens=2048,
-            temperature=0.1,
-        )
+        if self._provider == "gemini":
+            return ChatGoogleGenerativeAI(
+                model=settings.get_llm_model("gemini"),
+                google_api_key=settings.get_llm_api_key("gemini"),
+                max_output_tokens=2048,
+                temperature=0.1,
+            )
+        elif self._provider == "openrouter":
+            from langchain_openai import ChatOpenAI
+
+            return ChatOpenAI(
+                model=settings.get_llm_model("openrouter"),
+                base_url=settings.get_llm_base_url("openrouter"),
+                api_key=settings.get_llm_api_key("openrouter"),
+                max_tokens=2048,
+                temperature=0.1,
+            )
+        msg = f"Unknown provider: {self._provider}"
+        raise ValueError(msg)
 
     async def interpret(
         self,
@@ -97,7 +109,7 @@ class VisionInterpreter:
         except Exception as e:
             logger.error("vision_interpret_error", error=str(e))
             # Try fallback provider
-            if self._provider == "ollama":
+            if self._provider == "gemini":
                 logger.info("trying_openrouter_fallback")
                 fallback = VisionInterpreter(provider="openrouter")
                 return await fallback.interpret(

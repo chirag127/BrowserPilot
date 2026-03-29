@@ -13,27 +13,14 @@ async def health_check() -> HealthResponse:
     """Check server health and provider availability."""
     settings = get_settings()
 
-    # Check Ollama availability
-    ollama_ok = False
-    try:
-        import aiohttp
-
-        async with (
-            aiohttp.ClientSession() as session,
-            session.get(
-                f"{settings.ollama_base_url}/api/tags",
-                timeout=aiohttp.ClientTimeout(total=3),
-            ) as resp,
-        ):
-            ollama_ok = resp.status == 200
-    except Exception:
-        pass
+    # Check Gemini availability
+    gemini_available = bool(settings.google_api_key)
 
     # Check OpenRouter availability
     openrouter_ok = bool(settings.openrouter_api_key)
 
     return HealthResponse(
         status="ok",
-        ollama_available=ollama_ok,
+        gemini_available=gemini_available,
         openrouter_available=openrouter_ok,
     )

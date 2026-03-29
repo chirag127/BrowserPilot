@@ -4,7 +4,7 @@ import json
 from typing import Literal
 
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 from browser_pilot.config import get_settings
 from browser_pilot.logging import get_logger
@@ -34,15 +34,25 @@ class CriticResult:
 class Critic:
     """Validates whether a sub-task has been completed."""
 
-    def __init__(self, provider: str = "ollama") -> None:
+    def __init__(self, provider: str = "gemini") -> None:
         self._settings = get_settings()
-        self._llm = ChatOpenAI(
-            model=self._settings.get_llm_model(provider),
-            base_url=self._settings.get_llm_base_url(provider),
-            api_key=self._settings.get_llm_api_key(provider),
-            max_tokens=1024,
-            temperature=0.1,
-        )
+        if provider == "gemini":
+            self._llm = ChatGoogleGenerativeAI(
+                model=self._settings.get_llm_model("gemini"),
+                google_api_key=self._settings.get_llm_api_key("gemini"),
+                max_output_tokens=1024,
+                temperature=0.1,
+            )
+        else:
+            from langchain_openai import ChatOpenAI
+
+            self._llm = ChatOpenAI(
+                model=self._settings.get_llm_model(provider),
+                base_url=self._settings.get_llm_base_url(provider),
+                api_key=self._settings.get_llm_api_key(provider),
+                max_tokens=1024,
+                temperature=0.1,
+            )
 
     async def evaluate(
         self,
