@@ -13,13 +13,17 @@ class TestAgentMemory:
         assert memory.get_history() == ["clicked button"]
 
     def test_summarization(self) -> None:
-        memory = AgentMemory(max_history=5, summarize_after=3)
-        for i in range(10):
+        memory = AgentMemory(max_history=10, summarize_after=8)
+        for i in range(20):
             memory.add_action(f"action {i}")
 
         # Should have summarized old actions
-        assert len(memory.get_full_history()) > 0
-        assert memory.action_count == 10
+        full = memory.get_full_history()
+        assert len(full) > 0
+        # Total count preserved (20 actions added)
+        assert memory.action_count == 20
+        # Recent history capped at max_history
+        assert len(memory.get_history()) <= 10
 
     def test_clear(self) -> None:
         memory = AgentMemory()

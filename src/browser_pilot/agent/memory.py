@@ -17,12 +17,14 @@ class AgentMemory:
         self._history: list[str] = []
         self._observations: list[dict] = []
         self._summaries: list[str] = []
+        self._total_actions: int = 0
         self._max_history = max_history
         self._summarize_after = summarize_after
 
     def add_action(self, action_desc: str) -> None:
         """Add an action to the history."""
         self._history.append(action_desc)
+        self._total_actions += 1
         self._maybe_summarize()
 
     def add_observation(self, observation: dict) -> None:
@@ -63,8 +65,9 @@ class AgentMemory:
         self._history.clear()
         self._observations.clear()
         self._summaries.clear()
+        self._total_actions = 0
 
     @property
     def action_count(self) -> int:
         """Total number of actions taken."""
-        return len(self._history) + len(self._summaries)
+        return self._total_actions
