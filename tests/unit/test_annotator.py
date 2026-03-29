@@ -1,6 +1,6 @@
 """Tests for DOM annotator."""
 
-from browser_pilot.models.dom import BoundingBox, DOMElement
+from browser_pilot.models.dom import DOMElement
 from browser_pilot.vision.annotator import DOMAnnotator
 
 

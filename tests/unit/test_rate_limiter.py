@@ -1,7 +1,5 @@
 """Tests for rate limiter."""
 
-import asyncio
-
 import pytest
 
 from browser_pilot.utils.rate_limiter import RateLimiter

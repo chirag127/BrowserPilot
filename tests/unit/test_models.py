@@ -1,7 +1,7 @@
 """Tests for data models."""
 
 from browser_pilot.models.action import Action, ActionStatus, ActionType
-from browser_pilot.models.dom import BoundingBox, DOMElement
+from browser_pilot.models.dom import BoundingBox
 from browser_pilot.models.task import SubTask, SubTaskStatus, Task, TaskStatus
 
 

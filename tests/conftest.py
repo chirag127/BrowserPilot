@@ -1,22 +1,12 @@
 """Shared test fixtures."""
 
-import asyncio
 from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
 from browser_pilot.models.action import Action, ActionType
 from browser_pilot.models.dom import BoundingBox, DOMElement
 from browser_pilot.models.task import SubTask, Task, TaskStatus
-
-
-@pytest.fixture
-def event_loop():
-    """Create event loop for async tests."""
-    loop = asyncio.new_event_loop()
-    yield loop
-    loop.close()
 
 
 @pytest.fixture

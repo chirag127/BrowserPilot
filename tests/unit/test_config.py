@@ -1,9 +1,6 @@
 """Tests for configuration module."""
 
-import os
-from unittest.mock import patch
-
-from browser_pilot.config import Settings, get_settings
+from browser_pilot.config import Settings
 
 
 class TestSettings:
@@ -42,7 +39,7 @@ class TestSettings:
         settings = Settings(openrouter_api_key="")
         try:
             settings.get_llm_api_key("openrouter")
-            assert False, "Should raise ValueError"
+            raise AssertionError("Should raise ValueError")
         except ValueError as e:
             assert "OpenRouter API key not set" in str(e)
 
@@ -59,6 +56,6 @@ class TestSettings:
         settings = Settings()
         try:
             settings.get_llm_base_url("invalid")
-            assert False, "Should raise ValueError"
+            raise AssertionError("Should raise ValueError")
         except ValueError:
             pass
