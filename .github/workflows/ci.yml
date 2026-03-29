@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+
+  typecheck:
+    runs-on: ubuntu-latest
+    needs: [lint]
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --all-extras
+      - run: uv run mypy src/browser_pilot --ignore-missing-imports
+
+  test-unit:
+    runs-on: ubuntu-latest
+    needs: [lint]
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --all-extras
+      - run: uv run pytest tests/unit/ -v --tb=short
+        continue-on-error: true
+
+  test-integration:
+    runs-on: ubuntu-latest
+    needs: [test-unit]
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --all-extras
+      - run: npx playwright install chromium
+      - run: uv run pytest tests/integration/ -v --tb=short
+        continue-on-error: true
+
+  test-e2e:
+    runs-on: ubuntu-latest
+    needs: [test-integration]
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --all-extras
+      - run: npx playwright install chromium
+      - run: uv run pytest tests/e2e/ -v --tb=short
+        continue-on-error: true
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [test-unit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
