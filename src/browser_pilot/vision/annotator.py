@@ -1,7 +1,6 @@
 """DOM element annotation with Set-of-Marks overlay."""
 
 from io import BytesIO
-from typing import Optional
 
 from PIL import Image, ImageDraw, ImageFont
 

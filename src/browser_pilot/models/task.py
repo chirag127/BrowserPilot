@@ -1,14 +1,13 @@
 """Task and sub-task data models."""
 
-from datetime import datetime, timezone
-from enum import Enum
-from typing import Optional
+from datetime import UTC, datetime
+from enum import StrEnum
 from uuid import uuid4
 
 from pydantic import BaseModel, Field
 
 
-class TaskStatus(str, Enum):
+class TaskStatus(StrEnum):
     """Task lifecycle states."""
 
     PENDING = "pending"
@@ -20,7 +19,7 @@ class TaskStatus(str, Enum):
     CANCELLED = "cancelled"
 
 
-class SubTaskStatus(str, Enum):
+class SubTaskStatus(StrEnum):
     """Sub-task lifecycle states."""
 
     PENDING = "pending"
@@ -51,7 +50,7 @@ class SubTask(BaseModel):
     status: SubTaskStatus = SubTaskStatus.PENDING
     actions_taken: list[str] = Field(default_factory=list)
     parent_task_id: str = ""
-    error: Optional[str] = None
+    error: str | None = None
 
 
 class Task(BaseModel):
@@ -61,15 +60,11 @@ class Task(BaseModel):
     instruction: str
     status: TaskStatus = TaskStatus.PENDING
     sub_tasks: list[SubTask] = Field(default_factory=list)
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
-    updated_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
-    result: Optional[TaskResult] = None
-    error: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    result: TaskResult | None = None
+    error: str | None = None
 
     def mark_updated(self) -> None:
         """Update the timestamp."""
-        self.updated_at = datetime.now(timezone.utc)
+        self.updated_at = datetime.now(UTC)

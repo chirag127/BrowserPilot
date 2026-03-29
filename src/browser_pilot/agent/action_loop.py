@@ -1,19 +1,16 @@
 """Core action loop — the observe-decide-act cycle."""
 
-import asyncio
 import time
-from typing import Optional
 
 from browser_pilot.agent.critic import Critic
 from browser_pilot.agent.memory import AgentMemory
 from browser_pilot.agent.planner import Planner
-from browser_pilot.agent.state import AgentStateMachine, AgentState
+from browser_pilot.agent.state import AgentState, AgentStateMachine
 from browser_pilot.browser.actions import BrowserActions
 from browser_pilot.browser.controller import BrowserController
 from browser_pilot.browser.dom_inspector import DOMInspector
 from browser_pilot.config import get_settings
 from browser_pilot.logging import get_logger
-from browser_pilot.models.action import Action, ActionStatus
 from browser_pilot.models.dom import DOMElement
 from browser_pilot.models.result import ExecutionResult, StepResult
 from browser_pilot.models.task import SubTask, Task, TaskStatus
@@ -234,7 +231,7 @@ class ActionLoop:
                         )
                         break
 
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 logger.warning("step_timeout", step=step)
                 self._state.transition(AgentState.RECOVERING)
                 continue

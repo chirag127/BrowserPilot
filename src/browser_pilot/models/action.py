@@ -1,13 +1,12 @@
 """Action data models."""
 
-from enum import Enum
-from typing import Optional
+from enum import StrEnum
 from uuid import uuid4
 
 from pydantic import BaseModel, Field
 
 
-class ActionType(str, Enum):
+class ActionType(StrEnum):
     """Types of browser actions."""
 
     CLICK = "click"
@@ -25,7 +24,7 @@ class ActionType(str, Enum):
     UPLOAD_FILE = "upload_file"
 
 
-class ActionStatus(str, Enum):
+class ActionStatus(StrEnum):
     """Action execution status."""
 
     PENDING = "pending"
@@ -41,11 +40,11 @@ class Action(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid4()))
     action_type: ActionType
     params: dict = Field(default_factory=dict)
-    target_element_index: Optional[int] = None
+    target_element_index: int | None = None
     status: ActionStatus = ActionStatus.PENDING
     confidence: float = 0.0
     reasoning: str = ""
-    screenshot_before: Optional[str] = None
-    screenshot_after: Optional[str] = None
-    error: Optional[str] = None
+    screenshot_before: str | None = None
+    screenshot_after: str | None = None
+    error: str | None = None
     step_number: int = 0

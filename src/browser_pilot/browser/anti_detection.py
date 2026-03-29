@@ -1,7 +1,6 @@
 """Anti-detection and stealth measures for browser automation."""
 
 import random
-from typing import Optional
 
 from playwright.async_api import Page
 
@@ -60,7 +59,7 @@ STEALTH_SCRIPT = """
 class AntiDetection:
     """Stealth measures to avoid bot detection."""
 
-    def __init__(self, user_agent: Optional[str] = None) -> None:
+    def __init__(self, user_agent: str | None = None) -> None:
         self._user_agent = user_agent or random.choice(USER_AGENTS)
         self._viewport = random.choice(VIEWPORTS)
 

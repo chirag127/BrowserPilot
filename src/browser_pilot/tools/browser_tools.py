@@ -1,7 +1,5 @@
 """Browser action tools for LangChain integration."""
 
-from typing import Optional
-
 from langchain_core.tools import tool
 from playwright.async_api import Page
 

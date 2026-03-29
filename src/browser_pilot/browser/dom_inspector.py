@@ -1,7 +1,5 @@
 """DOM tree extraction and inspection."""
 
-from typing import Optional
-
 from playwright.async_api import Page
 
 from browser_pilot.logging import get_logger

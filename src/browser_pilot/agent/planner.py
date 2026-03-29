@@ -1,7 +1,6 @@
 """Task planner — decomposes instructions into sub-tasks."""
 
 import json
-from typing import Optional
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI

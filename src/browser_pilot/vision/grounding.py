@@ -42,16 +42,15 @@ class ActionGrounder:
             Tuple of (is_valid, confidence, reason).
         """
         # Actions without targets don't need grounding
-        if action.target_element_index is None:
-            if action.action_type.value in (
-                "scroll",
-                "navigate",
-                "wait",
-                "go_back",
-                "press_key",
-                "screenshot",
-            ):
-                return True, action.confidence, "No target element needed"
+        if action.target_element_index is None and action.action_type.value in (
+            "scroll",
+            "navigate",
+            "wait",
+            "go_back",
+            "press_key",
+            "screenshot",
+        ):
+            return True, action.confidence, "No target element needed"
 
         # Get fresh DOM state
         fresh_elements = await self._dom_inspector.inspect(page)
@@ -79,9 +78,11 @@ class ActionGrounder:
             return False, 0.1, "Element is not visible"
 
         # Check 3: Element is interactive
-        if action.action_type.value in ("click", "type", "select", "hover"):
-            if not fresh_el.is_interactive:
-                return False, 0.2, "Element is not interactive"
+        if (
+            action.action_type.value in ("click", "type", "select", "hover")
+            and not fresh_el.is_interactive
+        ):
+            return False, 0.2, "Element is not interactive"
 
         # Check 4: Bounding box match (element hasn't moved)
         if original_el and original_el.bbox and fresh_el.bbox:

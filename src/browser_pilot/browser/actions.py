@@ -2,10 +2,9 @@
 
 import asyncio
 import random
-from pathlib import Path
-from typing import Optional
 
-from playwright.async_api import Page, TimeoutError as PlaywrightTimeout
+from playwright.async_api import Page
+from playwright.async_api import TimeoutError as PlaywrightTimeout
 
 from browser_pilot.logging import get_logger
 from browser_pilot.models.action import Action, ActionType
@@ -21,7 +20,7 @@ class ActionResult:
         self,
         success: bool,
         action_type: str,
-        error: Optional[str] = None,
+        error: str | None = None,
     ) -> None:
         self.success = success
         self.action_type = action_type
@@ -89,7 +88,7 @@ class BrowserActions:
 
     def _find_element(
         self, elements: list[DOMElement], index: int
-    ) -> Optional[DOMElement]:
+    ) -> DOMElement | None:
         """Find element by index."""
         for el in elements:
             if el.index == index:

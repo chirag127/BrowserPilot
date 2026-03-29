@@ -1,7 +1,5 @@
 """DOM element models."""
 
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -21,7 +19,7 @@ class DOMElement(BaseModel):
     tag: str = ""
     text: str = ""
     attributes: dict = Field(default_factory=dict)
-    bbox: Optional[BoundingBox] = None
+    bbox: BoundingBox | None = None
     is_interactive: bool = False
     is_visible: bool = True
     selector: str = ""

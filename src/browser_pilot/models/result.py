@@ -1,7 +1,6 @@
 """Execution result models."""
 
-from datetime import datetime, timezone
-from typing import Optional
+from datetime import UTC, datetime
 from uuid import uuid4
 
 from pydantic import BaseModel, Field
@@ -16,8 +15,8 @@ class StepResult(BaseModel):
     success: bool = False
     confidence: float = 0.0
     reasoning: str = ""
-    screenshot_path: Optional[str] = None
-    error: Optional[str] = None
+    screenshot_path: str | None = None
+    error: str | None = None
     elapsed_seconds: float = 0.0
 
 
@@ -35,6 +34,4 @@ class ExecutionResult(BaseModel):
     total_time: float = 0.0
     total_steps: int = 0
     errors: list[str] = Field(default_factory=list)
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))

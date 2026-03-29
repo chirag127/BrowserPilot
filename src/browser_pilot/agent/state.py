@@ -1,8 +1,7 @@
 """Agent state machine."""
 
-from datetime import datetime, timezone
-from enum import Enum
-from typing import Optional
+from datetime import UTC, datetime
+from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
@@ -11,7 +10,7 @@ from browser_pilot.logging import get_logger
 logger = get_logger(__name__)
 
 
-class AgentState(str, Enum):
+class AgentState(StrEnum):
     """Agent lifecycle states."""
 
     IDLE = "idle"
@@ -32,13 +31,11 @@ class AgentStateMachine(BaseModel):
     """Finite state machine for agent lifecycle."""
 
     current_state: AgentState = AgentState.IDLE
-    previous_state: Optional[AgentState] = None
+    previous_state: AgentState | None = None
     step_count: int = 0
     failure_count: int = 0
-    last_transition: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
-    last_error: Optional[str] = None
+    last_transition: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    last_error: str | None = None
 
     # Valid state transitions
     TRANSITIONS: dict = {
@@ -109,7 +106,7 @@ class AgentStateMachine(BaseModel):
 
         self.previous_state = self.current_state
         self.current_state = new_state
-        self.last_transition = datetime.now(timezone.utc)
+        self.last_transition = datetime.now(UTC)
 
         if new_state == AgentState.EXECUTING:
             self.step_count += 1

@@ -1,7 +1,5 @@
 """Vision interpreter — sends screenshots to LLM for action decisions."""
 
-from typing import Optional
-
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 

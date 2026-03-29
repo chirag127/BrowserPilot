@@ -18,12 +18,14 @@ async def health_check() -> HealthResponse:
     try:
         import aiohttp
 
-        async with aiohttp.ClientSession() as session:
-            async with session.get(
+        async with (
+            aiohttp.ClientSession() as session,
+            session.get(
                 f"{settings.ollama_base_url}/api/tags",
                 timeout=aiohttp.ClientTimeout(total=3),
-            ) as resp:
-                ollama_ok = resp.status == 200
+            ) as resp,
+        ):
+            ollama_ok = resp.status == 200
     except Exception:
         pass
 

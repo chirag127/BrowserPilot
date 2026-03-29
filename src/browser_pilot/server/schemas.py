@@ -1,7 +1,6 @@
 """FastAPI server schemas."""
 
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -32,8 +31,8 @@ class TaskResponse(BaseModel):
     instruction: str
     status: str
     sub_tasks: list[dict] = Field(default_factory=list)
-    result: Optional[dict] = None
-    error: Optional[str] = None
+    result: dict | None = None
+    error: str | None = None
     created_at: datetime
     updated_at: datetime
 
@@ -70,4 +69,4 @@ class ErrorResponse(BaseModel):
     """Error response."""
 
     error: str
-    detail: Optional[str] = None
+    detail: str | None = None

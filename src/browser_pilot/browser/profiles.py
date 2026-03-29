@@ -2,7 +2,6 @@
 
 import json
 from pathlib import Path
-from typing import Optional
 
 from browser_pilot.logging import get_logger
 
@@ -32,7 +31,7 @@ class BrowserProfile:
             json.dump(state, f, indent=2)
         logger.info("storage_state_saved", path=str(self.storage_state_path))
 
-    def load_storage_state(self) -> Optional[dict]:
+    def load_storage_state(self) -> dict | None:
         """Load browser storage state if it exists."""
         if self.storage_state_path.exists():
             with open(self.storage_state_path) as f:

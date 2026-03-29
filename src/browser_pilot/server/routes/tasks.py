@@ -1,12 +1,10 @@
 """Task CRUD routes."""
 
 import asyncio
-from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException, Query
 
 from browser_pilot.agent.action_loop import ActionLoop
-from browser_pilot.config import get_settings
 from browser_pilot.logging import get_logger
 from browser_pilot.models.task import Task, TaskStatus
 from browser_pilot.server.schemas import (

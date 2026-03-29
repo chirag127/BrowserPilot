@@ -1,8 +1,6 @@
 """Screenshot capture and processing."""
 
 import time
-from pathlib import Path
-from typing import Optional
 
 from PIL import Image
 from playwright.async_api import Page
@@ -60,9 +58,7 @@ class ScreenshotCapture:
 
         return screenshot_bytes
 
-    async def capture_element(
-        self, page: Page, selector: str
-    ) -> Optional[bytes]:
+    async def capture_element(self, page: Page, selector: str) -> bytes | None:
         """Take a screenshot of a specific element."""
         element = await page.query_selector(selector)
         if not element:

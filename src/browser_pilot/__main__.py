@@ -1,7 +1,6 @@
 """CLI entry point for BrowserPilot."""
 
 import asyncio
-import sys
 
 import click
 from rich.console import Console
