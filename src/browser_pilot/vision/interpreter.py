@@ -6,10 +6,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from browser_pilot.config import get_settings
 from browser_pilot.logging import get_logger
 from browser_pilot.models.action import Action, ActionType
-from browser_pilot.vision.prompts import (
-    ACTOR_SYSTEM_PROMPT,
-    build_user_prompt,
-)
+from browser_pilot.vision.prompts import ACTOR_SYSTEM_PROMPT, build_user_prompt
 
 logger = get_logger(__name__)
 

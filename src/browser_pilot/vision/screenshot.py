@@ -85,9 +85,7 @@ class ScreenshotCapture:
 
     def get_screenshot_paths(self) -> list[str]:
         """Get all saved screenshot paths."""
-        return sorted(
-            str(p) for p in self._settings.screenshot_dir.glob("step_*.png")
-        )
+        return sorted(str(p) for p in self._settings.screenshot_dir.glob("step_*.png"))
 
     @staticmethod
     def to_base64(image_bytes: bytes) -> str:

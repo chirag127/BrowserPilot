@@ -82,8 +82,7 @@ class AntiDetection:
             "--disable-dev-shm-usage",
             "--disable-accelerated-2d-canvas",
             "--disable-gpu",
-            "--window-size="
-            f"{self._viewport['width']},{self._viewport['height']}",
+            "--window-size=" f"{self._viewport['width']},{self._viewport['height']}",
         ]
 
     async def apply_stealth(self, page: Page) -> None:

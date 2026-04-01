@@ -25,8 +25,7 @@ def sanitize_url(url: str) -> str:
 
     if parsed.scheme not in ("http", "https"):
         raise ValueError(
-            f"Invalid URL scheme: {parsed.scheme}. "
-            "Only http and https are allowed."
+            f"Invalid URL scheme: {parsed.scheme}. " "Only http and https are allowed."
         )
 
     if not parsed.netloc:

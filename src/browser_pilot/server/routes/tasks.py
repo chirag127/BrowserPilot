@@ -66,9 +66,7 @@ async def _run_task(task: Task, provider: str) -> None:
         result = await loop.run(task)
 
         task.result = result
-        task.status = (
-            TaskStatus.COMPLETED if result.success else TaskStatus.FAILED
-        )
+        task.status = TaskStatus.COMPLETED if result.success else TaskStatus.FAILED
         task.mark_updated()
 
         logger.info(
@@ -94,9 +92,7 @@ async def create_task(request: CreateTaskRequest) -> TaskResponse:
     bg_task = asyncio.create_task(_run_task(task, request.provider))
     _active_tasks[task.id] = bg_task
 
-    logger.info(
-        "task_created", task_id=task.id, instruction=task.instruction[:100]
-    )
+    logger.info("task_created", task_id=task.id, instruction=task.instruction[:100])
     return _task_to_response(task)
 
 

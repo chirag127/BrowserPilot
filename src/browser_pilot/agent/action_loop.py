@@ -138,9 +138,7 @@ class ActionLoop:
             try:
                 # OBSERVE
                 self._state.transition(AgentState.OBSERVING)
-                screenshot_bytes = await self._screenshot.capture(
-                    self._browser.page
-                )
+                screenshot_bytes = await self._screenshot.capture(self._browser.page)
                 current_elements = await self._dom.inspect(self._browser.page)
 
                 # Annotate
@@ -148,9 +146,7 @@ class ActionLoop:
                     screenshot_bytes, current_elements
                 )
                 screenshot_b64 = self._screenshot.to_base64(annotated_bytes)
-                element_summary = self._annotator.get_element_summary(
-                    current_elements
-                )
+                element_summary = self._annotator.get_element_summary(current_elements)
 
                 # DECIDE
                 self._state.transition(AgentState.DECIDING)
@@ -180,8 +176,7 @@ class ActionLoop:
                     )
                     self._state.transition(AgentState.RECOVERING)
                     action_history.append(
-                        f"REJECTED: {action.action_type.value} "
-                        f"(reason: {reason})"
+                        f"REJECTED: {action.action_type.value} " f"(reason: {reason})"
                     )
                     continue
 
@@ -213,9 +208,7 @@ class ActionLoop:
                 # VALIDATE — check completion with critic
                 if step > 0 and step % 3 == 0:
                     self._state.transition(AgentState.VALIDATING)
-                    page_text = await self._dom.get_page_text(
-                        self._browser.page
-                    )
+                    page_text = await self._dom.get_page_text(self._browser.page)
                     critic_result = await self._critic.evaluate(
                         sub_task_description=sub_task.description,
                         action_history=action_history,
