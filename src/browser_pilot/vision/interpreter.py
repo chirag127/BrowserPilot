@@ -122,17 +122,29 @@ class VisionInterpreter:
                 )
             raise
 
-    def _parse_response(self, content: str) -> Action:
+    def _parse_response(self, content) -> Action:
         """Parse LLM response into an Action object."""
         import json
 
+        # Handle both string and list responses (Gemini API can return list)
+        if isinstance(content, list):
+            content = "".join(
+                item.get("text", "") if isinstance(item, dict) else str(item)
+                for item in content
+            )
         try:
             # Try to extract JSON from the response
             content = content.strip()
+            # Extract JSON block if present
             if "```json" in content:
                 content = content.split("```json")[1].split("```")[0]
             elif "```" in content:
                 content = content.split("```")[1].split("```")[0]
+            elif "{" in content and "}" in content:
+                # Extract JSON object even without markdown formatting
+                start = content.find("{")
+                end = content.rfind("}") + 1
+                content = content[start:end]
 
             data = json.loads(content.strip())
 

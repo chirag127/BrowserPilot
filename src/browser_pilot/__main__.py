@@ -73,6 +73,17 @@ def run(
             for err in result.errors:
                 console.print(f"  - {err}")
 
+        if result.extracted_data:
+            console.print("\n[bold cyan]Extracted Data:[/]")
+            for step_key, data in result.extracted_data.items():
+                console.print(f"\n  [dim]{step_key}:[/]")
+                texts = data.get("texts", [])
+                if texts:
+                    for text in texts:
+                        console.print(f"    [green]{text}[/]")
+                else:
+                    console.print("    [dim](no data extracted)[/]")
+
         if result.screenshots:
             console.print(f"\n  Screenshots saved: {len(result.screenshots)}")
 

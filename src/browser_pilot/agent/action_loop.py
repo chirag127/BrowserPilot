@@ -89,6 +89,9 @@ class ActionLoop:
 
                 if step_result.success:
                     result.steps.append(step_result)
+                    # Collect extracted data from step
+                    if step_result.extracted_data:
+                        result.extracted_data[f"sub_task_{len(result.steps)}"] = step_result.extracted_data
                 else:
                     result.errors.append(step_result.error or "Unknown error")
                     if self._state.failure_count >= self._settings.max_failures:
@@ -200,6 +203,17 @@ class ActionLoop:
                     action_history.append(action_desc)
                     self._memory.add_action(action_desc)
 
+                    # Collect extracted data and store in action history for return
+                    if hasattr(action_result, 'extracted_text') and action_result.extracted_text:
+                        logger.info(
+                            "data_extracted",
+                            text=action_result.extracted_text[:200],
+                        )
+                        # Store in action_result for collection by caller
+                        action_history.append(
+                            f"EXTRACTED: {action_result.extracted_text[:200]}"
+                        )
+
                     # Check if sub-task is done
                     if action.action_type.value == "extract":
                         break
@@ -243,12 +257,20 @@ class ActionLoop:
 
         # Final validation
         self._state.transition(AgentState.VALIDATING)
+
+        # Extract any extracted text from action_history
+        extracted_texts = []
+        for action in action_history:
+            if action.startswith("EXTRACTED: "):
+                extracted_texts.append(action[len("EXTRACTED: "):])
+
         return StepResult(
             step_number=self._state.step_count,
             action_type="sub_task_complete",
             success=True,
             elapsed_seconds=time.monotonic() - start,
             reasoning=f"Sub-task: {sub_task.description[:100]}",
+            extracted_data={"texts": extracted_texts} if extracted_texts else {},
         )
 
     async def cancel(self) -> None:

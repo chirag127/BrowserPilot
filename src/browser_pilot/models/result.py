@@ -18,6 +18,7 @@ class StepResult(BaseModel):
     screenshot_path: str | None = None
     error: str | None = None
     elapsed_seconds: float = 0.0
+    extracted_data: dict = Field(default_factory=dict)
 
 
 class ExecutionResult(BaseModel):

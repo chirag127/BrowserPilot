@@ -21,10 +21,12 @@ class ActionResult:
         success: bool,
         action_type: str,
         error: str | None = None,
+        extracted_text: str = "",
     ) -> None:
         self.success = success
         self.action_type = action_type
         self.error = error
+        self.extracted_text = extracted_text
 
 
 class BrowserActions:
@@ -234,8 +236,26 @@ class BrowserActions:
     async def _extract(
         self, action: Action, elements: list[DOMElement]
     ) -> ActionResult:
-        """Extract text from an element."""
-        element = self._find_element(elements, action.target_element_index or 0)
+        """Extract text from an element or page metadata."""
+        # If no specific element is targeted, extract page metadata
+        if not action.target_element_index or action.target_element_index == 0:
+            # Try to extract page title and metadata
+            page_title = await self._page.title()
+            page_url = self._page.url
+            text = f"Title: {page_title}\nURL: {page_url}"
+            logger.info(
+                "extracted_page_metadata",
+                title=page_title,
+                url=page_url,
+            )
+            return ActionResult(
+                success=True,
+                action_type="extract",
+                extracted_text=text,
+            )
+
+        # Otherwise extract text from a specific element
+        element = self._find_element(elements, action.target_element_index)
         if not element or not element.selector:
             return ActionResult(
                 success=False,
@@ -249,6 +269,7 @@ class BrowserActions:
         return ActionResult(
             success=True,
             action_type="extract",
+            extracted_text=text or "",
         )
 
     @staticmethod
