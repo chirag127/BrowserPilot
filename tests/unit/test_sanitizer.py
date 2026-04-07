@@ -16,9 +16,7 @@ class TestSanitizeUrl:
         assert sanitize_url("https://example.com") == "https://example.com"
 
     def test_valid_http(self) -> None:
-        assert sanitize_url("http://example.com/path") == (
-            "http://example.com/path"
-        )
+        assert sanitize_url("http://example.com/path") == ("http://example.com/path")
 
     def test_empty_url(self) -> None:
         with pytest.raises(ValueError, match="Empty URL"):
@@ -33,9 +31,7 @@ class TestSanitizeUrl:
             sanitize_url("https://")
 
     def test_strips_whitespace(self) -> None:
-        assert sanitize_url("  https://example.com  ") == (
-            "https://example.com"
-        )
+        assert sanitize_url("  https://example.com  ") == ("https://example.com")
 
 
 class TestSanitizeText:

@@ -11,9 +11,7 @@ class AgentMemory:
     Implements a sliding window approach to keep token usage bounded.
     """
 
-    def __init__(
-        self, max_history: int = 20, summarize_after: int = 15
-    ) -> None:
+    def __init__(self, max_history: int = 20, summarize_after: int = 15) -> None:
         self._history: list[str] = []
         self._observations: list[dict] = []
         self._summaries: list[str] = []

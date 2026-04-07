@@ -75,9 +75,7 @@ class Critic:
             CriticResult with PASS/FAIL/PARTIAL status.
         """
         history_str = (
-            "\n".join(
-                f"  {i + 1}. {a}" for i, a in enumerate(action_history[-5:])
-            )
+            "\n".join(f"  {i + 1}. {a}" for i, a in enumerate(action_history[-5:]))
             or "  (no actions)"
         )
 

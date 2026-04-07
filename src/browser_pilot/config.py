@@ -110,7 +110,9 @@ class Settings(BaseSettings):
             return self.google_api_key
         elif provider == "openrouter":
             if not self.openrouter_api_key:
-                msg = "OpenRouter API key not set. Get free key at https://openrouter.ai"
+                msg = (
+                    "OpenRouter API key not set. Get free key at https://openrouter.ai"
+                )
                 raise ValueError(msg)
             return self.openrouter_api_key
         msg = f"Unknown provider: {provider}"

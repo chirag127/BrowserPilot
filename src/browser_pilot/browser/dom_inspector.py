@@ -155,9 +155,7 @@ class DOMInspector:
 
     async def get_page_text(self, page: Page) -> str:
         """Extract visible text content from the page."""
-        text = await page.evaluate(
-            "() => document.body.innerText.substring(0, 5000)"
-        )
+        text = await page.evaluate("() => document.body.innerText.substring(0, 5000)")
         return text or ""
 
     async def get_page_metadata(self, page: Page) -> dict:

@@ -74,17 +74,12 @@ class TestSettings:
     def test_get_llm_model_openrouter(self) -> None:
         """Test OpenRouter model retrieval."""
         settings = Settings()
-        assert (
-            settings.get_llm_model("openrouter") == "google/gemma-3-27b-it:free"
-        )
+        assert settings.get_llm_model("openrouter") == "google/gemma-3-27b-it:free"
 
     def test_get_llm_model_openrouter_custom(self) -> None:
         """Test custom OpenRouter model."""
         settings = Settings(openrouter_model="meta-llama/llama-3-70b-instruct")
-        assert (
-            settings.get_llm_model("openrouter")
-            == "meta-llama/llama-3-70b-instruct"
-        )
+        assert settings.get_llm_model("openrouter") == "meta-llama/llama-3-70b-instruct"
 
     def test_invalid_provider(self) -> None:
         """Test invalid provider raises error."""

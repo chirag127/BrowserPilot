@@ -35,9 +35,7 @@ class BrowserActions:
     def __init__(self, page: Page) -> None:
         self._page = page
 
-    async def execute(
-        self, action: Action, elements: list[DOMElement]
-    ) -> ActionResult:
+    async def execute(self, action: Action, elements: list[DOMElement]) -> ActionResult:
         """Execute an action based on its type.
 
         Args:
@@ -97,9 +95,7 @@ class BrowserActions:
                 return el
         return None
 
-    async def _click(
-        self, action: Action, elements: list[DOMElement]
-    ) -> ActionResult:
+    async def _click(self, action: Action, elements: list[DOMElement]) -> ActionResult:
         """Click on an element with human-like behavior."""
         element = self._find_element(elements, action.target_element_index or 0)
         if not element or not element.selector:
@@ -172,9 +168,7 @@ class BrowserActions:
         logger.info("navigated", url=url)
         return ActionResult(success=True, action_type="navigate")
 
-    async def _select(
-        self, action: Action, elements: list[DOMElement]
-    ) -> ActionResult:
+    async def _select(self, action: Action, elements: list[DOMElement]) -> ActionResult:
         """Select a dropdown option."""
         element = self._find_element(elements, action.target_element_index or 0)
         value = action.params.get("value", "")
@@ -188,9 +182,7 @@ class BrowserActions:
         logger.info("selected", element=element.selector, value=value)
         return ActionResult(success=True, action_type="select")
 
-    async def _hover(
-        self, action: Action, elements: list[DOMElement]
-    ) -> ActionResult:
+    async def _hover(self, action: Action, elements: list[DOMElement]) -> ActionResult:
         """Hover over an element."""
         element = self._find_element(elements, action.target_element_index or 0)
         if not element or not element.selector:
@@ -210,9 +202,7 @@ class BrowserActions:
         selector = action.params.get("selector", "")
 
         if selector:
-            await self._page.wait_for_selector(
-                selector, timeout=int(seconds * 1000)
-            )
+            await self._page.wait_for_selector(selector, timeout=int(seconds * 1000))
         else:
             await asyncio.sleep(seconds)
 
@@ -263,9 +253,7 @@ class BrowserActions:
                 error="Element not found",
             )
         text = await self._page.text_content(element.selector)
-        logger.info(
-            "extracted", element=element.selector, text=(text or "")[:100]
-        )
+        logger.info("extracted", element=element.selector, text=(text or "")[:100])
         return ActionResult(
             success=True,
             action_type="extract",

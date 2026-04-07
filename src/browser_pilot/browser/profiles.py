@@ -36,9 +36,7 @@ class BrowserProfile:
         if self.storage_state_path.exists():
             with open(self.storage_state_path) as f:
                 state = json.load(f)
-            logger.info(
-                "storage_state_loaded", path=str(self.storage_state_path)
-            )
+            logger.info("storage_state_loaded", path=str(self.storage_state_path))
             return state
         return None
 

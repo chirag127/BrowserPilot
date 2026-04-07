@@ -122,9 +122,7 @@ def config() -> None:
     table.add_column("Setting", style="cyan")
     table.add_column("Value", style="green")
 
-    table.add_row(
-        "Google API Key", "***" if settings.google_api_key else "(not set)"
-    )
+    table.add_row("Google API Key", "***" if settings.google_api_key else "(not set)")
     table.add_row("Gemini Model", settings.gemini_model)
     table.add_row(
         "OpenRouter Key",
